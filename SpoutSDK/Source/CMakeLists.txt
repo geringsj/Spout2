@@ -27,7 +27,6 @@ target_sources(Spout2
 		SpoutSenderMemory.cpp
 		SpoutSenderNames.cpp
 		SpoutSharedMemory.cpp
-	PUBLIC
 		Spout.h
 		SpoutCommon.h
 		SpoutCopy.h
@@ -41,7 +40,6 @@ target_sources(Spout2
 		SpoutSenderMemory.h
 		SpoutSenderNames.h
 		SpoutSharedMemory.h
-
 )
-target_include_directories(Spout2 PUBLIC ${CMAKE_CURRENT_LIST_DIR}/)
+target_include_directories(Spout2 INTERFACE ${CMAKE_CURRENT_LIST_DIR}/)
 
