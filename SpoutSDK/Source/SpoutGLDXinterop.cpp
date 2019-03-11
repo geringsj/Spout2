@@ -758,11 +758,16 @@ bool spoutGLDXinterop::CreateInterop(HWND hWnd, const char* sendername, unsigned
 	// Create a local opengl texture that will be linked to a shared DirectX texture
 	// This is never initialized using OpenGL, but has size and can be accessed when
 	// it is linked to the shared DirectX texture with the GL/DX Interop.
-	if(m_glTexture) {
-		glDeleteTextures(1, &m_glTexture);
-		m_glTexture = 0;
+	//
+	// BUGFIX: Deleting GL texture leads to use-after-free on texture resize
+	// when texture is aleady initialized and registered for interop.
+	//if(m_glTexture) {
+	//	glDeleteTextures(1, &m_glTexture);
+	//	m_glTexture = 0;
+	//}
+	if(m_glTexture == 0) {
+		glGenTextures(1, &m_glTexture);
 	}
-	glGenTextures(1, &m_glTexture);
 
 	// printf("CreateInterop 5 (format = %d)\n", format);
 
