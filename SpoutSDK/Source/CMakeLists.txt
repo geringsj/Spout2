@@ -11,11 +11,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # CMake related options for this project
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
-	
+
+# OpenGL
+find_package(OpenGL REQUIRED)
+
+set(LINK_LIBS_EXTERNAL ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+set(INCLUDE_LIBS_EXTERNAL ${OPENGL_INCLUDE_DIR})
+
 # build render app
-add_library(Spout2 STATIC "")
-target_sources(Spout2
-	PRIVATE
+add_library(Spout2  
 		SpoutCopy.cpp
 		SpoutDirectX.cpp
 		SpoutGLDXinterop.cpp
@@ -41,5 +45,9 @@ target_sources(Spout2
 		SpoutSenderNames.h
 		SpoutSharedMemory.h
 )
-target_include_directories(Spout2 INTERFACE ${CMAKE_CURRENT_LIST_DIR}/)
-
+target_include_directories(Spout2 PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
+    $<INSTALL_INTERFACE:./>
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ ${INCLUDE_LIBS_EXTERNAL})
+	
+target_link_libraries(Spout2 PRIVATE ${LINK_LIBS_EXTERNAL})
